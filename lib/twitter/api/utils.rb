@@ -14,9 +14,9 @@ module Twitter
       # @param path [String]
       # @param args [Array]
       # @return [Array<Twitter::User>]
-      def threaded_user_objects_from_response(request_method, path, args)
+      def parallel_user_objects_from_response(request_method, path, args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |user|
+        args.flatten.pmap do |user|
           object_from_response(Twitter::User, request_method, path, merge_user(options, user))
         end
       end
@@ -66,9 +66,9 @@ module Twitter
       # @param path [String]
       # @param args [Array]
       # @return [Array]
-      def threaded_object_from_response(klass, request_method, path, args)
+      def parallel_object_from_response(klass, request_method, path, args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           object_from_response(klass, request_method, path, options.merge(:id => id))
         end
       end

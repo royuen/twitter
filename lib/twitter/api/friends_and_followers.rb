@@ -161,7 +161,7 @@ module Twitter
         # Twitter always turns on notifications if the "follow" option is present, even if it's set to false
         # so only send follow if it's true
         options[:follow] = true if !!options.delete(:follow)
-        args.flatten.threaded_map do |user|
+        args.flatten.pmap do |user|
           begin
             merge_user!(options, user)
             object_from_response(Twitter::User, :post, "/1.1/friendships/create.json", options)
@@ -188,7 +188,7 @@ module Twitter
       #   @param users [Array<Integer, String, Twitter::User>, Set<Integer, String, Twitter::User>] An array of Twitter user IDs, screen names, or objects.
       #   @param options [Hash] A customizable set of options.
       def unfollow(*args)
-        threaded_user_objects_from_response(:post, "/1.1/friendships/destroy.json", args)
+        parallel_user_objects_from_response(:post, "/1.1/friendships/destroy.json", args)
       end
       alias friendship_destroy unfollow
 

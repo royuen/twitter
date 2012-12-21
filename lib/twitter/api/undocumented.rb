@@ -103,7 +103,7 @@ module Twitter
       #   @param options [Hash] A customizable set of options.
       def statuses_activity(*args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           status_activity(id, options)
         end
       end
